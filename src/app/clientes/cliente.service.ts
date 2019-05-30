@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { Cliente } from './cliente';
+import { Region } from './region';
+
 import { Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
@@ -21,6 +23,10 @@ export class ClienteService {
     private http: HttpClient,
     private router: Router
   ) { }
+
+  getRegiones(): Observable<Region[]> {
+    return this.http.get<Region[]>(this.urlEndPoint + '/regiones');
+  }
 
   // Lista todos los clientes
   getClientes(page: number): Observable<any> {
@@ -104,7 +110,7 @@ export class ClienteService {
   }
 
   // Sube foto de perfil
-  subirFoto(archivo: File, id):Observable<HttpEvent<{}>> {
+  subirFoto(archivo: File, id): Observable<HttpEvent<{}>> {
     let formData = new FormData();
     formData.append('archivo', archivo);
     formData.append('id', id);
