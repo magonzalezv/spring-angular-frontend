@@ -10,15 +10,18 @@ import { FormComponent } from './clientes/form.component';
 import { PaginatorComponent } from './paginator/paginator.component';
 import { PerfilComponent } from './clientes/perfil/perfil.component';
 import { LoginComponent } from './usuarios/login.component';
+import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
+import { FacturasComponent } from './facturas/facturas.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { AuthGuard } from './usuarios/guards/auth.guard';
 import { RoleGuard } from './usuarios/guards/role.guard';
 import { TokenNoopInterceptor } from './usuarios/interceptors/token.noop.interceptor';
+import { AuthNoopInterceptor } from './usuarios/interceptors/auth.noop.interceptor';
 
 registerLocaleData(localeES, 'es');
 
@@ -29,7 +32,10 @@ const routes: Routes = [
   { path: 'clientes/page/:page', component: ClientesComponent },
   { path: 'clientes/form', component: FormComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
   { path: 'clientes/form/:id', component: FormComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
+  { path: 'facturas/:id', component: DetalleFacturaComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_USER' } },
+  { path: 'facturas/form/:clienteId', component: FacturasComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'ROLE_ADMIN' } }
+
 ];
 
 
@@ -38,6 +44,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -50,6 +59,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     PaginatorComponent,
     PerfilComponent,
     LoginComponent,
+    DetalleFacturaComponent,
+    FacturasComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,12 +69,17 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     RouterModule.forRoot(routes),
     MatDatepickerModule,
     MatMomentDateModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatFormFieldModule
   ],
   providers: [
     ClienteService,
     { provide: LOCALE_ID, useValue: 'es' },
-    { provide: HTTP_INTERCEPTORS, useClass: TokenNoopInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenNoopInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthNoopInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
