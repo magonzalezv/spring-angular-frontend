@@ -47,6 +47,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { RegisterComponent } from './usuarios/register/register.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     LoginComponent,
     DetalleFacturaComponent,
     FacturasComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
